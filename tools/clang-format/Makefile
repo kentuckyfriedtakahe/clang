@@ -10,6 +10,7 @@
 CLANG_LEVEL := ../..
 
 TOOLNAME = clang-format
+LDFLAGS += -static
 
 # No plugins, optimize startup time.
 TOOL_NO_EXPORTS = 1
