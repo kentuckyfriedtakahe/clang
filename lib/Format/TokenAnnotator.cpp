@@ -1084,6 +1084,7 @@ void TokenAnnotator::calculateFormattingInformation(AnnotatedLine &Line) {
     return;
   FormatToken *Current = Line.First->Next;
   bool InFunctionDecl = Line.MightBeFunctionDecl;
+  bool FirstFunctionDecl = Line.MightBeFunctionDecl && Style.AlwaysBreakTopLevelFunctionsAfterType;
   while (Current != NULL) {
     if (Current->Type == TT_LineComment) {
       if (Current->Previous->BlockKind == BK_BracedInit)
@@ -1097,6 +1098,15 @@ void TokenAnnotator::calculateFormattingInformation(AnnotatedLine &Line) {
 
     Current->MustBreakBefore =
         Current->MustBreakBefore || mustBreakBefore(Line, *Current);
+
+    if (FirstFunctionDecl) {
+      if (Current->Type == TT_StartOfName) {
+        Current->MustBreakBefore = Line.Level == 0;
+      }
+      else if (Current->is(tok::l_paren)) {
+        FirstFunctionDecl = false;
+      }
+    }
 
     Current->CanBreakBefore =
         Current->MustBreakBefore || canBreakBefore(Line, *Current);

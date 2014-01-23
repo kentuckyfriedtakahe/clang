@@ -7285,6 +7285,7 @@ TEST_F(FormatTest, ParsesConfiguration) {
   CHECK_PARSE_BOOL(IndentFunctionDeclarationAfterType);
   CHECK_PARSE_BOOL(SpacesInParentheses);
   CHECK_PARSE_BOOL(SpacesInAngles);
+  CHECK_PARSE_BOOL(AlwaysBreakTopLevelFunctionsAfterType);
   CHECK_PARSE_BOOL(SpaceInEmptyParentheses);
   CHECK_PARSE_BOOL(SpacesInCStyleCastParentheses);
   CHECK_PARSE_BOOL(SpaceBeforeAssignmentOperators);
@@ -8005,6 +8006,16 @@ TEST_F(FormatTest, SpacesInAngles) {
 
   Spaces.SpacesInAngles = false;
   verifyFormat("A<A<int>>();", Spaces);
+}
+
+TEST_F(FormatTest, AlwaysBreakTopLevelFunctionsAfterType) {
+  FormatStyle TypeBreak = getLLVMStyle();
+  verifyFormat("int f() {}", TypeBreak);
+  verifyFormat("int f();", TypeBreak);
+
+  TypeBreak.AlwaysBreakTopLevelFunctionsAfterType = true;
+  verifyFormat("int\nf() {}", TypeBreak);
+  verifyFormat("class MyClass\n{ int f(); };", TypeBreak);
 }
 
 } // end namespace tooling

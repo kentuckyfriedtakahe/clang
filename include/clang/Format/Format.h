@@ -247,6 +247,10 @@ struct FormatStyle {
   /// are not also definitions after the type.
   bool IndentFunctionDeclarationAfterType;
 
+  /// \brief If \c true, breaks top function definitions after the type
+  /// declaration.
+  bool AlwaysBreakTopLevelFunctionsAfterType;
+
   /// \brief If \c true, spaces will be inserted after '(' and before ')'.
   bool SpacesInParentheses;
 
@@ -300,10 +304,12 @@ struct FormatStyle {
            AllowShortIfStatementsOnASingleLine ==
                R.AllowShortIfStatementsOnASingleLine &&
            AllowShortLoopsOnASingleLine == R.AllowShortLoopsOnASingleLine &&
-           AlwaysBreakTemplateDeclarations ==
-               R.AlwaysBreakTemplateDeclarations &&
            AlwaysBreakBeforeMultilineStrings ==
                R.AlwaysBreakBeforeMultilineStrings &&
+           AlwaysBreakTopLevelFunctionsAfterType ==
+               R.AlwaysBreakTopLevelFunctionsAfterType &&
+           AlwaysBreakTemplateDeclarations ==
+               R.AlwaysBreakTemplateDeclarations &&
            BinPackParameters == R.BinPackParameters &&
            BreakBeforeBinaryOperators == R.BreakBeforeBinaryOperators &&
            BreakBeforeTernaryOperators == R.BreakBeforeTernaryOperators &&
