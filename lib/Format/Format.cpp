@@ -336,12 +336,16 @@ FormatStyle getChromiumStyle() {
 FormatStyle getMozillaStyle() {
   FormatStyle MozillaStyle = getLLVMStyle();
   MozillaStyle.AllowAllParametersOfDeclarationOnNextLine = false;
+  MozillaStyle.BreakConstructorInitializersBeforeComma = true;
   MozillaStyle.ConstructorInitializerAllOnOneLineOrOnePerLine = true;
+  MozillaStyle.ConstructorInitializerIndentWidth = 2;
   MozillaStyle.DerivePointerBinding = true;
   MozillaStyle.IndentCaseLabels = true;
   MozillaStyle.ObjCSpaceBeforeProtocolList = false;
   MozillaStyle.PenaltyReturnTypeOnItsOwnLine = 200;
   MozillaStyle.PointerBindsToType = true;
+  MozillaStyle.ContinuationIndentWidth = 2;
+  MozillaStyle.BreakBeforeBraces = FormatStyle::BS_Linux;
   return MozillaStyle;
 }
 
