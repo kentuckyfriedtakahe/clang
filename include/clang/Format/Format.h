@@ -215,6 +215,9 @@ struct FormatStyle {
     /// Like \c Attach, but break before braces on function, namespace and
     /// class definitions.
     BS_Linux,
+    /// Like \c Attach but break before braces on function and class
+    /// definitions.
+    BS_Mozilla,
     /// Like \c Attach, but break before function definitions.
     BS_Stroustrup,
     /// Always break before braces.

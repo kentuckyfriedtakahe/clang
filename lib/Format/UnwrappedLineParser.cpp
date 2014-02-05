@@ -281,7 +281,9 @@ void UnwrappedLineParser::parseLevel(bool HasOpeningBrace) {
     case tok::l_brace:
       // FIXME: Add parameter whether this can happen - if this happens, we must
       // be in a non-declaration context.
-      parseBlock(/*MustBeDeclaration=*/false);
+      bool NewLine = Style.BreakBeforeBraces != FormatStyle::BS_Mozilla;
+      parseBlock(/*MustBeDeclaration=*/false, /*AddLevel=*/true,
+                 /*MunchSemi=*/true, /*NewLine=*/NewLine);
       addUnwrappedLine();
       break;
     case tok::r_brace:
@@ -382,12 +384,13 @@ void UnwrappedLineParser::calculateBraceTypes() {
 }
 
 void UnwrappedLineParser::parseBlock(bool MustBeDeclaration, bool AddLevel,
-                                     bool MunchSemi) {
+                                     bool MunchSemi, bool NewLine) {
   assert(FormatTok->Tok.is(tok::l_brace) && "'{' expected");
   unsigned InitialLevel = Line->Level;
   nextToken();
 
-  addUnwrappedLine();
+  if (NewLine)
+    addUnwrappedLine();
 
   ScopedDeclarationState DeclarationState(*Line, DeclarationScopeStack,
                                           MustBeDeclaration);
@@ -701,8 +704,11 @@ void UnwrappedLineParser::parseStructuralElement() {
         if (Style.BreakBeforeBraces != FormatStyle::BS_Attach)
           addUnwrappedLine();
         FormatTok->Type = TT_FunctionLBrace;
-        parseBlock(/*MustBeDeclaration=*/false);
-        addUnwrappedLine();
+        parseBlock(/*MustBeDeclaration=*/false, /*AddLevel=*/true,
+                   /*MunchSemi=*/true, /*NewLine=*/Style.BreakBeforeBraces !=
+                                           FormatStyle::BS_Mozilla);
+        if (NewLine)
+          addUnwrappedLine();
         return;
       }
       // Otherwise this was a braced init list, and the structural
@@ -1224,6 +1230,7 @@ void UnwrappedLineParser::parseRecord() {
   }
   if (FormatTok->Tok.is(tok::l_brace)) {
     if (Style.BreakBeforeBraces == FormatStyle::BS_Linux ||
+        Style.BreakBeforeBraces == FormatStyle::BS_Mozilla ||
         Style.BreakBeforeBraces == FormatStyle::BS_Allman ||
         Style.BreakBeforeBraces == FormatStyle::BS_GNU)
       addUnwrappedLine();
